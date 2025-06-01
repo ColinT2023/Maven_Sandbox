@@ -9,5 +9,5 @@ This sandbox environment serves as a testing ground for innovative approaches to
 
 ### MCP + JupyterLab Workflow
 
-Model Context Protocol (MCP) Integration: Implementation of MCP within JupyterLab environment for enhanced data analysis workflows
-User Guide: Step-by-step instructions for replicating the MCP + JupyterLab setup and workflow
+- Model Context Protocol (MCP) Integration: Implementation of MCP within JupyterLab environment for enhanced data analysis workflows
+- User Guide: Step-by-step instructions for replicating the MCP + JupyterLab setup and workflow
