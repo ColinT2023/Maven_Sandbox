@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP JupyterLab Integration Setup Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #0066cc;
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .header h2 {
+            color: #666;
+            font-size: 18px;
+            font-weight: normal;
+            margin-top: 5px;
+        }
+        
+        .doc-info {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .doc-info p {
+            margin: 5px 0;
+        }
+        
+        h1 {
+            color: #0066cc;
+            font-size: 24px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h2 {
+            color: #333;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            padding-left: 10px;
+            border-left: 4px solid #0066cc;
+        }
+        
+        h3 {
+            color: #555;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            border: none;
+            padding: 0;
+        }
+        
+        .toc ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .toc li {
+            margin: 8px 0;
+        }
+        
+        .overview-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .overview-box h3 {
+            color: #1565c0;
+            margin-top: 0;
+        }
+        
+        .architecture {
+            text-align: center;
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .inline-code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .checklist {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .checklist li {
+            list-style: none;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #0066cc;
+            font-size: 16px;
+        }
+        
+        .step-box {
+            background: #ffffff;
+            border: 2px solid #e3f2fd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .step-number {
+            background: #0066cc;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .step-title {
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .footer {
+            border-top: 2px solid #e0e0e0;
+            padding-top: 20px;
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        @media print {
+            body { margin: 0.5in; }
+            .step-box { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Model Context Protocol (MCP) Integration with JupyterLab</h1>
+        <h2>Complete Setup Guide for Claude Desktop</h2>
+    </div>
+
+    <div class="doc-info">
+        <p><strong>Document Version:</strong> 1.0</p>
+        <p><strong>Last Updated:</strong> June 2025</p>
+        <p><strong>Compatibility:</strong> Claude Desktop, Windows 10/11, macOS, JupyterLab 3.0+</p>
+    </div>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li>Overview</li>
+            <li>Prerequisites</li>
+            <li>Method 1: Filesystem Server (Recommended)</li>
+            <li>Method 2: Direct Jupyter Server Integration</li>
+            <li>Troubleshooting</li>
+            <li>Usage Examples</li>
+            <li>Best Practices</li>
+            <li>Support Resources</li>
+        </ol>
+    </div>
+
+    <h1>1. Overview</h1>
+    
+    <p>This guide provides step-by-step instructions for integrating Claude Desktop with JupyterLab using the Model Context Protocol (MCP). MCP enables Claude to directly read, write, and execute code in your Jupyter notebooks, creating a powerful AI-assisted data science workflow.</p>
+
+    <div class="overview-box">
+        <h3>What You'll Achieve</h3>
+        <ul>
+            <li><strong>Direct file access:</strong> Claude can read and modify your Jupyter notebooks</li>
+            <li><strong>Code execution:</strong> Run Python code and view outputs through Claude</li>
+            <li><strong>File management:</strong> Create, organize, and manage your data science projects</li>
+            <li><strong>Seamless workflow:</strong> Switch between Claude chat and Jupyter development</li>
+        </ul>
+    </div>
+
+    <div class="architecture">
+        Claude Desktop ←→ MCP Server ←→ Local File System ←→ Jupyter Notebooks
+    </div>
+
+    <h1>2. Prerequisites</h1>
+
+    <h2>Required Software</h2>
+
+    <ol>
+        <li><strong>Claude Desktop Application</strong>
+            <ul>
+                <li>Download from: https://claude.ai/download</li>
+                <li>Version: Latest stable release</li>
+                <li>Account: Free or Pro (both supported)</li>
+            </ul>
+        </li>
+        <li><strong>Node.js Runtime</strong>
+            <ul>
+                <li>Download from: https://nodejs.org/</li>
+                <li>Version: 16.0 or higher</li>
+                <li>Required for MCP filesystem server</li>
+            </ul>
+        </li>
+        <li><strong>JupyterLab/Jupyter Notebook</strong>
+            <ul>
+                <li>Install via Anaconda, pip, or conda</li>
+                <li>Version: 3.0 or higher recommended</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>System Requirements</h2>
+    
+    <ul>
+        <li><strong>Operating System:</strong> Windows 10/11, macOS 10.15+, or Linux</li>
+        <li><strong>RAM:</strong> 4GB minimum, 8GB recommended</li>
+        <li><strong>Storage:</strong> 2GB free space for installations</li>
+        <li><strong>Network:</strong> Internet connection for initial setup</li>
+    </ul>
+
+    <h2>Verification Steps</h2>
+
+    <p>Open your terminal/command prompt and verify installations:</p>
+
+    <div class="code-block"># Check Node.js installation
+node --version
+# Expected output: v16.0.0 or higher
+
+# Check npm (included with Node.js)
+npm --version
+# Expected output: 8.0.0 or higher
+
+# Check Python and Jupyter
+python --version
+jupyter --version
+# Verify both commands return version numbers</div>
+
+    <h1>3. Method 1: Filesystem Server (Recommended)</h1>
+
+    <p>This method uses the MCP filesystem server to provide Claude with direct access to your Jupyter notebook files. It's the most reliable and widely supported approach.</p>
+
+    <div class="step-box">
+        <span class="step-number">1</span>
+        <span class="step-title">Install MCP Filesystem Server</span>
+        
+        <p>Open your terminal/command prompt as <strong>Administrator</strong> (Windows) or with <strong>sudo</strong> (macOS/Linux):</p>
+
+        <div class="code-block">npm install -g @modelcontextprotocol/server-filesystem</div>
+
+        <div class="success">
+            <strong>Expected Output:</strong><br>
+            <span class="inline-code">added 59 packages in 5s<br>
+            15 packages are looking for funding<br>
+            run `npm fund` for details</span>
+        </div>
+    </div>
+
+    <div class="step-box">
+        <span class="step-number">2</span>
+        <span class="step-title">Locate Your Project Directories</span>
+        
+        <p>Identify where your Jupyter notebooks are stored. Common locations:</p>
+
+        <h3>Windows:</h3>
+        <div class="code-block"># Check your user directory
+echo %USERPROFILE%
+dir %USERPROFILE%
+
+# Common Jupyter locations
+dir "%USERPROFILE%\Documents"
+dir "%USERPROFILE%\Downloads" 
+dir "%USERPROFILE%\OneDrive"</div>
+
+        <h3>macOS/Linux:</h3>
+        <div class="code-block"># Check your home directory
+echo $HOME
+ls -la $HOME
+
+# Common Jupyter locations
+ls -la ~/Documents
+ls -la ~/Downloads
+ls -la ~/Desktop</div>
+
+        <div class="warning">
+            <strong>Important:</strong> Make note of the exact paths where your <span class="inline-code">.ipynb</span> files are located.
+        </div>
+    </div>
+
+    <div class="step-box">
+        <span class="step-number">3</span>
+        <span class="step-title">Configure Claude Desktop</span>
+        
+        <h3>Open Claude Desktop Configuration</h3>
+        <ul>
+            <li><strong>Windows:</strong> Navigate to <span class="inline-code">%APPDATA%\Claude Desktop\</span></li>
+            <li><strong>macOS:</strong> Navigate to <span class="inline-code">~/Library/Application Support/Claude/</span></li>
+            <li><strong>Linux:</strong> Navigate to <span class="inline-code">~/.config/Claude/</span></li>
+        </ul>
+
+        <h3>Create/Edit Configuration File</h3>
+        <p>Create or edit the file named <span class="inline-code">claude_desktop_config.json</span></p>
+
+        <h3>Add Filesystem Server Configuration</h3>
+
+        <h4>Windows Example:</h4>
+        <div class="code-block">{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\YourUsername\\Documents",
+        "C:\\Users\\YourUsername\\Downloads",
+        "C:\\Users\\YourUsername"
+      ]
+    }
+  }
+}</div>
+
+        <h4>macOS/Linux Example:</h4>
+        <div class="code-block">{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/YourUsername/Documents",
+        "/Users/YourUsername/Downloads",
+        "/Users/YourUsername/Desktop"
+      ]
+    }
+  }
+}</div>
+
+        <div class="warning">
+            <strong>Important:</strong> Replace <span class="inline-code">YourUsername</span> with your actual username and adjust paths to match your specific directory structure.
+        </div>
+    </div>
+
+    <div class="step-box">
+        <span class="step-number">4</span>
+        <span class="step-title">Restart Claude Desktop</span>
+        
+        <ol>
+            <li><strong>Close Claude Desktop completely</strong></li>
+            <li><strong>Reopen the application</strong></li>
+            <li><strong>Verify MCP Connection</strong>
+                <ul>
+                    <li>Look for a connector icon (🔌) in the chat interface</li>
+                    <li>The icon should appear in the bottom-left area of the input box</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="step-box">
+        <span class="step-number">5</span>
+        <span class="step-title">Test the Integration</span>
+        
+        <p>Try these test prompts in Claude:</p>
+
+        <div class="code-block">1. "What Jupyter notebook files do I have in my Documents folder?"
+
+2. "Can you show me the structure of my [notebook_name].ipynb file?"
+
+3. "Create a new Jupyter notebook called 'test_mcp.ipynb' with a simple pandas example"</div>
+
+        <div class="success">
+            <strong>Expected Results:</strong>
+            <ul>
+                <li>Claude should list your <span class="inline-code">.ipynb</span> files</li>
+                <li>Claude can read and display notebook contents</li>
+                <li>Claude can create new notebook files</li>
+            </ul>
+        </div>
+    </div>
+
+    <h1>4. Method 2: Direct Jupyter Server Integration</h1>
+
+    <p>This method connects directly to a running Jupyter server. Use this if you need real-time kernel execution.</p>
+
+    <div class="step-box">
+        <span class="step-number">1</span>
+        <span class="step-title">Install Additional Dependencies</span>
+        
+        <div class="code-block"># Install Python MCP packages
+pip install mcp
+pip install jupyter-kernel-client
+
+# Alternative: Install via uv (if preferred)
+pip install uv
+uv pip install mcp jupyter-kernel-client</div>
+    </div>
+
+    <div class="step-box">
+        <span class="step-number">2</span>
+        <span class="step-title">Start JupyterLab with Token Authentication</span>
+        
+        <div class="code-block"># Start Jupyter with a custom token
+jupyter lab --port 8888 --IdentityProvider.token YOUR_SECRET_TOKEN --ip 0.0.0.0
+
+# Replace YOUR_SECRET_TOKEN with a secure string
+# Example: MY_SECURE_TOKEN_123</div>
+    </div>
+
+    <div class="step-box">
+        <span class="step-number">3</span>
+        <span class="step-title">Configure Claude Desktop for Jupyter Server</span>
+        
+        <p>Add this configuration to your <span class="inline-code">claude_desktop_config.json</span>:</p>
+
+        <div class="code-block">{
+  "mcpServers": {
+    "jupyter": {
+      "command": "python",
+      "args": ["-m", "jupyter_mcp_server.server"],
+      "env": {
+        "JUPYTER_URL": "http://localhost:8888",
+        "JUPYTER_TOKEN": "YOUR_SECRET_TOKEN"
+      }
+    }
+  }
+}</div>
+    </div>
+
+    <h1>5. Troubleshooting</h1>
+
+    <h2>Common Issues and Solutions</h2>
+
+    <h3>Issue 1: "Server disconnected" Error</h3>
+    
+    <div class="warning">
+        <strong>Symptoms:</strong> MCP server starts but immediately disconnects
+    </div>
+
+    <p><strong>Solutions:</strong></p>
+    <ol>
+        <li><strong>Check file paths</strong> in configuration are correct and accessible</li>
+        <li><strong>Verify permissions</strong> - ensure Claude can access specified directories</li>
+        <li><strong>Check Node.js version</strong> - must be 16.0 or higher</li>
+        <li><strong>Try simpler paths</strong> - start with just your home directory</li>
+    </ol>
+
+    <div class="success">
+        <strong>Example Fix:</strong>
+        <div class="code-block">{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\YourUsername"
+      ]
+    }
+  }
+}</div>
+    </div>
+
+    <h3>Issue 2: "spawn docker ENOENT" Error</h3>
+    
+    <div class="warning">
+        <strong>Symptoms:</strong> Error messages about Docker not found
+    </div>
+
+    <p><strong>Solutions:</strong></p>
+    <ol>
+        <li><strong>Use Method 1 (Filesystem Server)</strong> instead of Jupyter server</li>
+        <li><strong>Install Docker Desktop</strong> if you specifically need container support</li>
+        <li><strong>Check configuration</strong> - ensure you're not mixing different server types</li>
+    </ol>
+
+    <h3>Issue 3: MCP Icon Not Appearing</h3>
+    
+    <div class="warning">
+        <strong>Symptoms:</strong> No connector icon in Claude Desktop interface
+    </div>
+
+    <p><strong>Solutions:</strong></p>
+    <ol>
+        <li><strong>Check configuration file location</strong> - must be in correct directory</li>
+        <li><strong>Validate JSON syntax</strong> - use a JSON validator tool</li>
+        <li><strong>Restart Claude completely</strong> - ensure full application restart</li>
+        <li><strong>Enable Developer Mode</strong> in Claude for detailed logs</li>
+    </ol>
+
+    <h2>Configuration Validation</h2>
+
+    <div class="checklist">
+        <strong>Validation Checklist:</strong>
+        <ul>
+            <li>Valid JSON syntax (use jsonlint.com to verify)</li>
+            <li>Correct file paths with proper escaping</li>
+            <li>Accessible directories with read/write permissions</li>
+            <li>No trailing commas or syntax errors</li>
+        </ul>
+    </div>
+
+    <h1>6. Usage Examples</h1>
+
+    <h2>Jupyter Notebook Operations</h2>
+
+    <table>
+        <tr>
+            <th>Operation</th>
+            <th>Example Prompt</th>
+        </tr>
+        <tr>
+            <td>Reading Notebooks</td>
+            <td>"Show me the contents of notebook.ipynb"</td>
+        </tr>
+        <tr>
+            <td>Library Analysis</td>
+            <td>"What libraries are imported in my analysis notebook?"</td>
+        </tr>
+        <tr>
+            <td>Creating Notebooks</td>
+            <td>"Create a new notebook for time series analysis"</td>
+        </tr>
+        <tr>
+            <td>Code Optimization</td>
+            <td>"Optimize the plotting code in my visualization notebook"</td>
+        </tr>
+    </table>
+
+    <h1>7. Best Practices</h1>
+
+    <h2>Security Considerations</h2>
+    
+    <ul>
+        <li><strong>Limit Directory Access</strong> - Only grant access to directories containing your projects</li>
+        <li><strong>Token Management</strong> - Use strong, unique tokens for Jupyter server connections</li>
+        <li><strong>File Backup</strong> - Always backup important notebooks before allowing modifications</li>
+    </ul>
+
+    <h2>Performance Optimization</h2>
+    
+    <ul>
+        <li><strong>Directory Structure</strong> - Organize notebooks in logical project folders</li>
+        <li><strong>Resource Management</strong> - Close unused Jupyter kernels to free memory</li>
+        <li><strong>Workflow Integration</strong> - Establish consistent naming conventions</li>
+    </ul>
+
+    <h1>8. Support Resources</h1>
+
+    <h2>Official Documentation</h2>
+    
+    <ul>
+        <li><strong>Claude Desktop:</strong> https://docs.anthropic.com/claude/docs</li>
+        <li><strong>Model Context Protocol:</strong> https://modelcontextprotocol.io/</li>
+        <li><strong>MCP Servers Repository:</strong> https://github.com/modelcontextprotocol/servers</li>
+    </ul>
+
+    <h2>Community Resources</h2>
+    
+    <ul>
+        <li><strong>MCP GitHub Discussions:</strong> https://github.com/modelcontextprotocol/specification/discussions</li>
+        <li><strong>Anthropic Community Forum:</strong> https://community.anthropic.com/</li>
+        <li><strong>Stack Overflow:</strong> Tag questions with 'model-context-protocol'</li>
+    </ul>
+
+    <div class="footer">
+        <p><strong>© 2025 - MCP JupyterLab Integration Guide</strong></p>
+        <p>This guide is provided under MIT License. Feel free to share, modify, and distribute with attribution.</p>
+    </div>
+</body>
+</html>
